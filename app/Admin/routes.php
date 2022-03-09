@@ -11,7 +11,9 @@ Route::group([
     'namespace'  => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function (Router $router) {
-
+    // 首页
     $router->get('/', 'HomeController@index');
 
+    // 轮播图
+    $router->resource('banners', 'BannerController');
 });
