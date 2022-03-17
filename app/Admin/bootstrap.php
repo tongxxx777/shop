@@ -24,3 +24,9 @@ use Dcat\Admin\Show;
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+
+// 表格初始化
+Grid::resolving(function (Grid $grid) {
+    $grid->model()->orderByDesc('id'); // 默认排序规则
+    $grid->addTableClass(['table-text-center']); // 设置表格文字居中
+});

@@ -8,6 +8,8 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 
+use App\Enums\BannerIsShow;
+
 class BannerController extends AdminController
 {
     /**
@@ -18,17 +20,13 @@ class BannerController extends AdminController
     protected function grid()
     {
         return Grid::make(new Banner(), function (Grid $grid) {
+            $grid->model()->orderBy('order');
+
             $grid->column('id')->sortable();
-            $grid->column('image');
-            $grid->column('order');
-            $grid->column('is_show');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
-        
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
-            });
+            $grid->column('image')->image();
+            $grid->column('order')->orderable()->sortable();
+            $grid->column('is_show')->switch()->sortable();
+            $grid->column('created_at')->sortable();
         });
     }
 
@@ -43,9 +41,9 @@ class BannerController extends AdminController
     {
         return Show::make($id, new Banner(), function (Show $show) {
             $show->field('id');
-            $show->field('image');
+            $show->field('image')->image();
             $show->field('order');
-            $show->field('is_show');
+            $show->field('is_show')->using(BannerIsShow::asSelectArray())->label();
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -60,12 +58,8 @@ class BannerController extends AdminController
     {
         return Form::make(new Banner(), function (Form $form) {
             $form->display('id');
-            $form->text('image');
-            $form->text('order');
-            $form->text('is_show');
-        
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->image('image')->move('banner/images')->uniqueName()->autoUpload()->required();
+            $form->switch('is_show')->default(BannerIsShow::YES);
         });
     }
 }
