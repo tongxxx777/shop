@@ -2,13 +2,11 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Repositories\Banner;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use App\Admin\Repositories\Banner;
 use Dcat\Admin\Http\Controllers\AdminController;
-
-use App\Enums\BannerIsShow;
 
 class BannerController extends AdminController
 {
@@ -43,7 +41,9 @@ class BannerController extends AdminController
             $show->field('id');
             $show->field('image')->image();
             $show->field('order');
-            $show->field('is_show')->using(BannerIsShow::asSelectArray())->label();
+            $show->field('is_show')->display(function ($value) {
+                return $value ? '是' : '否';
+            })->label();
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -59,7 +59,7 @@ class BannerController extends AdminController
         return Form::make(new Banner(), function (Form $form) {
             $form->display('id');
             $form->image('image')->move('banner/images')->uniqueName()->autoUpload()->required();
-            $form->switch('is_show')->default(BannerIsShow::YES);
+            $form->switch('is_show')->default(true);
         });
     }
 }

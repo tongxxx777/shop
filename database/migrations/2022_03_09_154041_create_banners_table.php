@@ -4,8 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Enums\BannerIsShow;
-
 return new class extends Migration
 {
     /**
@@ -19,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('image', 50)->comment('图片');
             $table->unsignedSmallInteger('order')->default(1)->comment('顺序');
-            $table->unsignedTinyInteger('is_show')->default(BannerIsShow::YES)->comment('是否展示');
+            $table->boolean('is_show')->default(true)->comment('是否展示');
 
             $table->timestamps();
             $table->softDeletes();
